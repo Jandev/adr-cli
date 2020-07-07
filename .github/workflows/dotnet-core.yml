@@ -22,12 +22,12 @@ jobs:
       working-directory: ./src
 
     - name: Build
-      run: dotnet build --configuration Release --no-restore
+      run: dotnet build --runtime win7-x64 --configuration Release --no-restore
       working-directory: ./src
 
     - name: Test
-      run: dotnet test --no-restore --verbosity normal
+      run: dotnet test --runtime win7-x64 --no-restore --verbosity normal
       working-directory: ./src
     
     - name: Publish for Windows-x64
-      run: dotnet publish ./src/adr/adr-cli.csproj -r win7-x64 -c Release --no-restore --no-build /p:PublishSingleFile=true /p:PublishTrimmed=true
+      run: dotnet publish ./src/adr/adr-cli.csproj --runtime win7-x64 -c Release --no-restore --no-build /p:PublishSingleFile=true /p:PublishTrimmed=true
