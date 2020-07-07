@@ -6,6 +6,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "adr-cli", "adr\adr-cli.cspr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "tests", "adr.tests\tests.csproj", "{D1BAB1E6-0927-4893-AD8E-0B328BF66E6E}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution items", "Solution items", "{34ACDCCD-7FF4-4CE3-981D-5EA30CF0B562}"
+	ProjectSection(SolutionItems) = preProject
+		..\.gitignore = ..\.gitignore
+		..\LICENSE = ..\LICENSE
+		..\README.md = ..\README.md
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
