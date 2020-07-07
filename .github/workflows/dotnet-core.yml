@@ -9,7 +9,7 @@ on:
 jobs:
   build:
 
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     steps:
     - uses: actions/checkout@v2
@@ -30,13 +30,13 @@ jobs:
       working-directory: ./src
 
     - name: Publish for Windows-x64
-      run: dotnet publish ./src/adr/adr-cli.csproj --runtime win7-x64 -c Release --output ${{ github.workspace }}/artifact/windows/
+      run: dotnet publish ./src/adr/adr-cli.csproj --runtime win7-x64 -c Release --no-restore --no-build --output ${{ github.workspace }}/artifact/windows/
 
     - name: Publish for Windows-x64 single executable
-      run: dotnet publish ./src/adr/adr-cli.csproj --runtime win7-x64 -c Release /p:PublishSingleFile=true --output ${{ github.workspace }}/artifact/windows-portable/
+      run: dotnet publish ./src/adr/adr-cli.csproj --runtime win7-x64 -c Release --no-restore --no-build /p:PublishSingleFile=true --output ${{ github.workspace }}/artifact/windows-portable/
 
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v2
       with:
-        name: ADR-CLI-tool-Windowns-x64
+        name: ADR-CLI-tool-Windows-x64
         path: ${{ github.workspace }}/artifact/
