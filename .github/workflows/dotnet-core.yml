@@ -30,4 +30,10 @@ jobs:
       working-directory: ./src
     
     - name: Publish for Windows-x64
-      run: dotnet publish ./src/adr/adr-cli.csproj --runtime win7-x64 -c Release --no-restore --no-build /p:PublishSingleFile=true /p:PublishTrimmed=true
+      run: dotnet publish ./src/adr/adr-cli.csproj --runtime win7-x64 -c Release --no-restore --no-build /p:PublishSingleFile=true /p:PublishTrimmed=true --output ${{ github.workspace }}/artifact/
+
+    - name: Upload a Build Artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: ADR-CLI tool
+        path: ${{ github.workspace }}/artifact/
