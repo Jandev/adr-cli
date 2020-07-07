@@ -30,5 +30,4 @@ jobs:
       working-directory: ./src
     
     - name: Publish for Windows-x64
-      run: dotnet publish -r win-x64 -c Release /p:PublishSingleFile=true /p:PublishTrimmed=true
-      working-directory: ./src      
+      run: dotnet publish ./src/adr/adr-cli.csproj -r win-x64 -c Release --no-restore --no-build /p:PublishSingleFile=true /p:PublishTrimmed=true
