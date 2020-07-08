@@ -48,7 +48,7 @@ namespace adr
                 docFolder,
                 $"{fileNumber.ToString().PadLeft(4, '0')}-{SanitizeFileName(this.Title)}.md");
 
-            CreateDocumentsFolderIfNotExists();
+            Directory.CreateDirectory(this.docFolder);
 
             WriteAdrFile(fileNumber);
         }
@@ -62,13 +62,12 @@ namespace adr
                 this.docFolder,
                 $"{fileNumber.ToString().PadLeft(4, '0')}-{SanitizeFileName(this.Title)}.md");
 
-            CreateDocumentsFolderIfNotExists();
-
             WriteInitialAdrFile(fileNumber);
         }
 
         private void WriteInitialAdrFile(int fileNumber)
         {
+            Directory.CreateDirectory(Path.GetDirectoryName(Path.GetFullPath(this.fileName)));
             using var writer = File.CreateText(this.fileName);
             {
                 writer.WriteLine($"# {fileNumber}. {this.Title}");
@@ -96,7 +95,8 @@ namespace adr
 
         private void WriteAdrFile(int fileNumber)
         {
-            using var writer = File.CreateText(fileName);
+            Directory.CreateDirectory(Path.GetDirectoryName(Path.GetFullPath(this.fileName)));
+            using var writer = File.CreateText(this.fileName);
             {
                 writer.WriteLine($"# {fileNumber}. {this.Title}");
                 writer.WriteLine();
@@ -117,14 +117,6 @@ namespace adr
                 writer.WriteLine("## Consequences");
                 writer.WriteLine();
                 writer.WriteLine("{consequences}");
-            }
-        }
-
-        private void CreateDocumentsFolderIfNotExists()
-        {
-            if (!Directory.Exists(this.docFolder))
-            {
-                Directory.CreateDirectory(this.docFolder);
             }
         }
 
