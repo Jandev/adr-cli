@@ -25,7 +25,7 @@ jobs:
       working-directory: ./src
 
     - name: Build
-      run: dotnet build --runtime win7-x64 --configuration Release --no-restore -p:Version=${{ jobs.build.env.version }}
+      run: dotnet build --runtime win7-x64 --configuration Release --no-restore -p:Version=${{ version }}
       working-directory: ./src
 
     - name: Test
@@ -33,10 +33,10 @@ jobs:
       working-directory: ./src
 
     - name: Publish for Windows-x64
-      run: dotnet publish ${{ jobs.build.env.cliProjectFile }} --runtime win7-x64 -c Release --no-restore --no-build --output ${{ github.workspace }}/artifact/windows/
+      run: dotnet publish ${{ cliProjectFile }} --runtime win7-x64 -c Release --no-restore --no-build --output ${{ github.workspace }}/artifact/windows/
 
     - name: Publish for Windows-x64 single executable
-      run: dotnet publish ${{ jobs.build.env.cliProjectFile }} --runtime win7-x64 -c Release --no-restore --no-build /p:PublishSingleFile=true --output ${{ github.workspace }}/artifact/windows-portable/
+      run: dotnet publish ${{ cliProjectFile }} --runtime win7-x64 -c Release --no-restore --no-build /p:PublishSingleFile=true --output ${{ github.workspace }}/artifact/windows-portable/
 
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v2
