@@ -9,7 +9,7 @@ on:
 jobs:
   build:
     env:
-      version: 1.0.0.${{env:GITHUB_RUN_NUMBER}}
+      version: 1.0.0.${{ github.run_number }}
       cliProjectFile: ./src/adr/adr-cli.csproj
 
     runs-on: windows-latest
