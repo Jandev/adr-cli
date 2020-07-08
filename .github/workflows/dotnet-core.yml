@@ -30,21 +30,21 @@ jobs:
 
     - name: Install dependencies
       run: dotnet restore
-      working-directory: ${{ WORKING_DIRECTORY }}
+      working-directory: ${ WORKING_DIRECTORY }
 
     - name: Build
-      run: dotnet build --runtime ${{ RUNTIME }} --configuration ${{ CONFIGURATION }} --no-restore -p:Version=${{ ASSEMBLY_VERSION }}
-      working-directory: ${{ WORKING_DIRECTORY }}
+      run: dotnet build --runtime ${ RUNTIME } --configuration ${ CONFIGURATION } --no-restore -p:Version=${ ASSEMBLY_VERSION }
+      working-directory: ${ WORKING_DIRECTORY }
 
     - name: Test
-      run: dotnet test --runtime ${{ RUNTIME }} --no-restore --verbosity normal
-      working-directory: ${{ WORKING_DIRECTORY }}
+      run: dotnet test --runtime ${ RUNTIME } --no-restore --verbosity normal
+      working-directory: ${ WORKING_DIRECTORY }
 
     - name: Publish for Windows-x64
-      run: dotnet publish ${{ cliProjectFile }} --runtime ${{ RUNTIME }} -c ${{ CONFIGURATION }} --no-restore --no-build --output ${{ env.OUTPUT_PATH }}/windows/
+      run: dotnet publish ${ ADR_PROJECT_FILE } --runtime ${ RUNTIME } -c ${ CONFIGURATION } --no-restore --no-build --output ${{ env.OUTPUT_PATH }}/windows/
 
     - name: Publish for Windows-x64 single executable
-      run: dotnet publish ${{ cliProjectFile }} --runtime ${{ RUNTIME }} -c ${{ CONFIGURATION }} --no-restore --no-build /p:PublishSingleFile=true --output ${{ env.OUTPUT_PATH }}/windows-portable/
+      run: dotnet publish ${ ADR_PROJECT_FILE } --runtime ${ RUNTIME } -c ${ CONFIGURATION } --no-restore --no-build /p:PublishSingleFile=true --output ${{ env.OUTPUT_PATH }}/windows-portable/
 
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v2
