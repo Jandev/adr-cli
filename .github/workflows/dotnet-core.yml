@@ -1,5 +1,9 @@
 name: .NET Core Build and Publish
 
+env:
+  DOTNET_VERSION: "3.1.101"
+  OUTPUT_PATH: ${{ github.workspace }}/artifact/
+
 on:
   push:
     branches: [ main ]
@@ -7,10 +11,13 @@ on:
     branches: [ main ]
 
 jobs:
-  build:
+  build_and_publish:
     env:
-      version: 1.0.0.${{ github.run_number }}
-      cliProjectFile: ./src/adr/adr-cli.csproj
+      ASSEMBLY_VERSION: 1.0.0.${{ github.run_number }}
+      ADR_PROJECT_FILE: "./src/adr/adr-cli.csproj"
+      WORKING_DIRECTORY: "./src"
+      RUNTIME: "win7-x64"
+      CONFIGURATION: "Release"
 
     runs-on: windows-latest
 
@@ -19,27 +26,28 @@ jobs:
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: 3.1.101
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+
     - name: Install dependencies
       run: dotnet restore
-      working-directory: ./src
+      working-directory: ${{ WORKING_DIRECTORY }}
 
     - name: Build
-      run: dotnet build --runtime win7-x64 --configuration Release --no-restore -p:Version=${{ version }}
-      working-directory: ./src
+      run: dotnet build --runtime ${{ RUNTIME }} --configuration ${{ CONFIGURATION }} --no-restore -p:Version=${{ ASSEMBLY_VERSION }}
+      working-directory: ${{ WORKING_DIRECTORY }}
 
     - name: Test
-      run: dotnet test --runtime win7-x64 --no-restore --verbosity normal
-      working-directory: ./src
+      run: dotnet test --runtime ${{ RUNTIME }} --no-restore --verbosity normal
+      working-directory: ${{ WORKING_DIRECTORY }}
 
     - name: Publish for Windows-x64
-      run: dotnet publish ${{ cliProjectFile }} --runtime win7-x64 -c Release --no-restore --no-build --output ${{ github.workspace }}/artifact/windows/
+      run: dotnet publish ${{ cliProjectFile }} --runtime ${{ RUNTIME }} -c ${{ CONFIGURATION }} --no-restore --no-build --output ${{ env.OUTPUT_PATH }}/windows/
 
     - name: Publish for Windows-x64 single executable
-      run: dotnet publish ${{ cliProjectFile }} --runtime win7-x64 -c Release --no-restore --no-build /p:PublishSingleFile=true --output ${{ github.workspace }}/artifact/windows-portable/
+      run: dotnet publish ${{ cliProjectFile }} --runtime ${{ RUNTIME }} -c ${{ CONFIGURATION }} --no-restore --no-build /p:PublishSingleFile=true --output ${{ env.OUTPUT_PATH }}/windows-portable/
 
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v2
       with:
         name: ADR-CLI-tool-Windows-x64
-        path: ${{ github.workspace }}/artifact/
+        path: ${{ env.OUTPUT_PATH }}
