@@ -18,7 +18,7 @@ jobs:
       RUNTIME: "win7-x64"
       CONFIGURATION: "Release"
 
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v2
@@ -32,18 +32,18 @@ jobs:
       working-directory: ./src
 
     - name: Build
-      run: dotnet build --runtime $Env:RUNTIME --configuration $Env:CONFIGURATION --no-restore -p:Version=$Env:ASSEMBLY_VERSION
+      run: dotnet build --runtime $RUNTIME --configuration $CONFIGURATION --no-restore -p:Version=$ASSEMBLY_VERSION
       working-directory: ./src
 
     - name: Test
-      run: dotnet test --runtime $Env:RUNTIME --no-restore --verbosity normal
+      run: dotnet test --runtime $RUNTIME --no-restore --verbosity normal
       working-directory: ./src
 
     - name: Publish for Windows-x64
-      run: dotnet publish $Env:ADR_PROJECT_FILE --runtime $Env:RUNTIME -c $Env:CONFIGURATION --no-restore --no-build --output ${{ env.OUTPUT_PATH }}/windows/
+      run: dotnet publish $ADR_PROJECT_FILE --runtime $RUNTIME -c $CONFIGURATION --no-restore --no-build --output ${{ env.OUTPUT_PATH }}/windows/
 
     - name: Publish for Windows-x64 single executable
-      run: dotnet publish $Env:ADR_PROJECT_FILE --runtime $Env:RUNTIME -c $Env:CONFIGURATION --no-restore --no-build /p:PublishSingleFile=true --output ${{ env.OUTPUT_PATH }}/windows-portable/
+      run: dotnet publish $ADR_PROJECT_FILE --runtime $RUNTIME -c $CONFIGURATION --no-restore --no-build /p:PublishSingleFile=true --output ${{ env.OUTPUT_PATH }}/windows-portable/
 
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v2
