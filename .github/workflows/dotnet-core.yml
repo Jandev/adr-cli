@@ -7,10 +7,10 @@ on:
     branches: [ main ]
 
 jobs:
-  env:
-    version: 1.0.0.{{GITHUB_RUN_NUMBER}}
-    cliProjectFile: ./src/adr/adr-cli.csproj
   build:
+    env:
+        version: 1.0.0.{{GITHUB_RUN_NUMBER}}
+        cliProjectFile: ./src/adr/adr-cli.csproj
 
     runs-on: windows-latest
 
