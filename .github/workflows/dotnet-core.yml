@@ -15,7 +15,6 @@ jobs:
     env:
       ASSEMBLY_VERSION: 1.0.0.${{ github.run_number }}
       ADR_PROJECT_FILE: "./src/adr/adr-cli.csproj"
-      WORKING_DIRECTORY: "./src"
       RUNTIME: "win7-x64"
       CONFIGURATION: "Release"
 
@@ -30,15 +29,15 @@ jobs:
 
     - name: Install dependencies
       run: dotnet restore
-      working-directory: ${ WORKING_DIRECTORY }
+      working-directory: ./src
 
     - name: Build
       run: dotnet build --runtime ${ RUNTIME } --configuration ${ CONFIGURATION } --no-restore -p:Version=${ ASSEMBLY_VERSION }
-      working-directory: ${ WORKING_DIRECTORY }
+      working-directory: ./src
 
     - name: Test
       run: dotnet test --runtime ${ RUNTIME } --no-restore --verbosity normal
-      working-directory: ${ WORKING_DIRECTORY }
+      working-directory: ./src
 
     - name: Publish for Windows-x64
       run: dotnet publish ${ ADR_PROJECT_FILE } --runtime ${ RUNTIME } -c ${ CONFIGURATION } --no-restore --no-build --output ${{ env.OUTPUT_PATH }}/windows/
