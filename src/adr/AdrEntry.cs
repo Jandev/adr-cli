@@ -128,23 +128,31 @@ namespace adr
             }
             catch
             {
-                // hack because of this: https://github.com/dotnet/corefx/issues/10361
-                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                try
                 {
-                    var url = this.fileName.Replace("&", "^&");
-                    Process.Start(new ProcessStartInfo("cmd", $"/c start {url}") { CreateNoWindow = true });
+                    // hack because of this: https://github.com/dotnet/corefx/issues/10361
+                    if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                    {
+                        var url = this.fileName.Replace("&", "^&");
+                        Process.Start(new ProcessStartInfo("cmd", $"/c start {url}") {CreateNoWindow = true});
+                    }
+                    else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+                    {
+                        Process.Start("xdg-open", this.fileName);
+                    }
+                    else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+                    {
+                        Process.Start("open", this.fileName);
+                    }
+                    else
+                    {
+                        throw;
+                    }
+
                 }
-                else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+                catch
                 {
-                    Process.Start("xdg-open", this.fileName);
-                }
-                else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
-                {
-                    Process.Start("open", this.fileName);
-                }
-                else
-                {
-                    throw;
+                    // If there is no default application configured for markdown files, don't throw an exception.
                 }
             }
 
