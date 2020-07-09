@@ -20,7 +20,7 @@ namespace adr
         {
             this.docFolder = AdrSettings.Current.DocFolder;
             this.templateType = templateType;
-            this.templatePath = $"{AdrSettings.Current.TemplateFolder}\\{templateType.ToString()}.md";
+            this.templatePath = $"{AdrSettings.Current.TemplateFolder}{Path.DirectorySeparatorChar}{templateType.ToString()}.md";
         }
 
         public string Title { get; set; } = "Record Architecture Decisions";

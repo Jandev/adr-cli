@@ -43,7 +43,7 @@ namespace adr
         {
             if (!File.Exists(DefaultFileName))
             {
-                settings.DocFolder = "docs\\adr";
+                settings.DocFolder = $"docs{Path.DirectorySeparatorChar}adr";
                 settings.TemplateFolder = "";
                 return settings;
             }
