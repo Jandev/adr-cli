@@ -10,11 +10,14 @@ namespace adr
     {
         public string Title { get; set; }
         public int Number { get; set; }
+        public string FileName { get; set; }
         public string SupersededFile { get; set; }
 
         public AdrFile(string filePath)
         {
             string fileName = Path.GetFileName(filePath);
+            FileName = fileName;
+
             string num = fileName.Split("-")[0];
             
             if(int.TryParse(num, out int number))

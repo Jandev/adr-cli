@@ -44,7 +44,13 @@ namespace adr
                             continue;
 
                         AdrFile adrFile = new AdrFile(file);
-                        writer.WriteLine($"| {adrFile.Number} | [{adrFile.Title}](./{fileName})| |");
+                        if (string.IsNullOrWhiteSpace(adrFile.SupersededFile))
+                            writer.WriteLine($"| {adrFile.Number} | [{adrFile.Title}](./{adrFile.FileName})| |");
+                        else
+                        {
+                            AdrFile superSededFile = new AdrFile(adrFile.SupersededFile);
+                            writer.WriteLine($"| {adrFile.Number} | ~~[{adrFile.Title}](./{fileName})~~| [{superSededFile.Title}](./{superSededFile.FileName}) |");
+                        }
                     }
                 }
             }
