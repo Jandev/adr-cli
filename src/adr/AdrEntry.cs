@@ -36,6 +36,8 @@ namespace adr
                 this.WriteNew();
             }
 
+            new AdrIndex(this.docFolder).Generate();
+
             return this;
         }
 
@@ -171,7 +173,7 @@ namespace adr
             return maxFileNum + 1;
         }
 
-        private static string SanitizeFileName(string title)
+        public static string SanitizeFileName(string title)
         {
             return title
                 .Replace(' ', '-')
