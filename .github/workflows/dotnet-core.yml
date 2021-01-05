@@ -92,9 +92,19 @@ jobs:
       if: github.ref == 'refs/heads/master'
       run: dotnet publish $ADR_PROJECT_FILE --runtime $WINDOWS_RUNTIME -c $CONFIGURATION --no-restore --no-build /p:PublishSingleFile=true --output ${{ env.OUTPUT_PATH }}/windows-portable/
 
+    - name: Zip Windows-x64 artifacts
+      uses: montudor/action-zip@v0.1.0
+      with:
+        args: zip -qq -r ${{ env.OUTPUT_PATH }}/ADR-CLI-tool-windows-${{ steps.gitversion.outputs.nuGetVersionV2 }}.zip ${{ env.OUTPUT_PATH }}/windows-portable/
+
     - name: Publish for Ubuntu-x64 single executable
       if: github.ref == 'refs/heads/master'
       run: dotnet publish $ADR_PROJECT_FILE --runtime $UBUNTU_RUNTIME -c $CONFIGURATION /p:PublishSingleFile=true --output ${{ env.OUTPUT_PATH }}/ubuntu-portable/
+
+    - name: Zip Ubuntu-x64 artifacts
+      uses: montudor/action-zip@v0.1.0
+      with:
+        args: zip -qq -r ${{ env.OUTPUT_PATH }}/ADR-CLI-tool-ubuntu-${{ steps.gitversion.outputs.nuGetVersionV2 }}.zip ${{ env.OUTPUT_PATH }}/ubuntu-portable/
 
     - name: Upload a Build Artifact
       if: github.ref == 'refs/heads/master'
