@@ -89,18 +89,13 @@ jobs:
     - name: Publish for Windows-x64 single executable
       run: dotnet publish $ADR_PROJECT_FILE --runtime $WINDOWS_RUNTIME -c $CONFIGURATION --no-restore --no-build /p:PublishSingleFile=true --output ${{ env.OUTPUT_PATH }}/windows-portable/
 
-    - name: Zip Windows-x64 artifacts
-      uses: montudor/action-zip@v0.1.0
-      with:
-        args: zip -qq -r ${{ env.OUTPUT_PATH }}/ADR-CLI-tool-windows-${{ steps.gitversion.outputs.nuGetVersionV2 }}.zip ${{ env.OUTPUT_PATH }}/windows-portable/
-
     - name: Publish for Ubuntu-x64 single executable
       run: dotnet publish $ADR_PROJECT_FILE --runtime $UBUNTU_RUNTIME -c $CONFIGURATION /p:PublishSingleFile=true --output ${{ env.OUTPUT_PATH }}/ubuntu-portable/
 
-    - name: Zip Ubuntu-x64 artifacts
+    - name: Zip artifacts
       uses: montudor/action-zip@v0.1.0
       with:
-        args: zip -qq -r ${{ env.OUTPUT_PATH }}/ADR-CLI-tool-ubuntu-${{ steps.gitversion.outputs.nuGetVersionV2 }}.zip ${{ env.OUTPUT_PATH }}/ubuntu-portable/
+        args: zip -qq -r ${{ env.OUTPUT_PATH }}/ADR-CLI-tool-${{ steps.gitversion.outputs.nuGetVersionV2 }}.zip ${{ env.OUTPUT_PATH }}/
 
     - name: Create Release
       id: create_release
@@ -122,15 +117,4 @@ jobs:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_path: ${{ env.OUTPUT_PATH }}/ADR-CLI-tool-windows-${{ steps.gitversion.outputs.nuGetVersionV2 }}.zip
         asset_name: ADR-CLI-tool-windows-${{ steps.gitversion.outputs.nuGetVersionV2 }}.zip
-        asset_content_type: application/zip
-
-    - name: Upload Ubuntu Release Asset
-      id: upload-release-asset 
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ${{ env.OUTPUT_PATH }}/ADR-CLI-tool-ubuntu-${{ steps.gitversion.outputs.nuGetVersionV2 }}.zip
-        asset_name: ADR-CLI-tool-ubuntu-${{ steps.gitversion.outputs.nuGetVersionV2 }}.zip
         asset_content_type: application/zip
