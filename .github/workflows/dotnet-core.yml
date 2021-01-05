@@ -81,7 +81,7 @@ jobs:
       working-directory: ./src
 
     - name: Build
-      run: dotnet build --runtime $WINDOWS_RUNTIME --configuration $CONFIGURATION --no-restore -p:Version=$ASSEMBLY_VERSION
+      run: dotnet build --runtime $WINDOWS_RUNTIME --configuration $CONFIGURATION --no-restore -p:Version=${{ steps.gitversion.outputs.nuGetVersionV2 }}
       working-directory: ./src
 
     - name: Test
