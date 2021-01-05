@@ -97,5 +97,16 @@ jobs:
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v2
       with:
-        name: ADR-CLI-tool
+        name: ADR-CLI-tool-${{ steps.gitversion.outputs.nuGetVersionV2 }}
         path: ${{ env.OUTPUT_PATH }}
+
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+      with:
+        tag_name: ${{ steps.gitversion.outputs.nuGetVersionV2 }}
+        release_name: Release ${{ steps.gitversion.outputs.nuGetVersionV2 }}
+        draft: false
+        prerelease: false
