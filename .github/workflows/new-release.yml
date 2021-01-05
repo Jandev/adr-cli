@@ -87,10 +87,10 @@ jobs:
       working-directory: ./src
 
     - name: Publish for Windows-x64 single executable
-      run: dotnet publish $ADR_PROJECT_FILE --runtime $WINDOWS_RUNTIME -c $CONFIGURATION --no-restore --no-build /p:PublishSingleFile=true --output ${{ env.OUTPUT_PATH }}/windows-portable/
+      run: dotnet publish $ADR_PROJECT_FILE --runtime $WINDOWS_RUNTIME -c $CONFIGURATION --no-restore --no-build /p:PublishSingleFile=true --output ${{ env.OUTPUT_PATH }}windows-portable/
 
     - name: Publish for Ubuntu-x64 single executable
-      run: dotnet publish $ADR_PROJECT_FILE --runtime $UBUNTU_RUNTIME -c $CONFIGURATION /p:PublishSingleFile=true --output ${{ env.OUTPUT_PATH }}/ubuntu-portable/
+      run: dotnet publish $ADR_PROJECT_FILE --runtime $UBUNTU_RUNTIME -c $CONFIGURATION /p:PublishSingleFile=true --output ${{ env.OUTPUT_PATH }}ubuntu-portable/
 
     - name: Zip artifacts
       uses: montudor/action-zip@v0.1.0
