@@ -95,14 +95,14 @@ jobs:
     - name: Zip Windows artifacts
       uses: montudor/action-zip@v0.1.0
       with:
-        args: zip -r ./ADR-CLI-tool-windows-${{ steps.gitversion.outputs.nuGetVersionV2 }}.zip ./artifact/windows-portable/
+        args: zip -r ./artifact/ADR-CLI-tool-windows-${{ steps.gitversion.outputs.nuGetVersionV2 }}.zip ./artifact/windows-portable/
 
     - name: Zip Ubuntu artifacts
       uses: montudor/action-zip@v0.1.0
       with:
-        args: zip -r ./ADR-CLI-tool-ubuntu-${{ steps.gitversion.outputs.nuGetVersionV2 }}.zip ./artifact/ubuntu-portable/
+        args: zip -r ./artifact/ADR-CLI-tool-ubuntu-${{ steps.gitversion.outputs.nuGetVersionV2 }}.zip ./artifact/ubuntu-portable/
 
-    - name: Release
+    - name: Create release
       id: create_release
       uses: softprops/action-gh-release@v1
       env:
