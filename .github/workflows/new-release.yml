@@ -95,7 +95,7 @@ jobs:
     - name: Zip artifacts
       uses: montudor/action-zip@v0.1.0
       with:
-        args: zip -r ${{ env.OUTPUT_PATH }}ADR-CLI-tool-${{ steps.gitversion.outputs.nuGetVersionV2 }}.zip ${{ env.OUTPUT_PATH }} -i "*"
+        args: zip -r ${{ env.OUTPUT_PATH }}ADR-CLI-tool-${{ steps.gitversion.outputs.nuGetVersionV2 }}.zip ${{ env.OUTPUT_PATH }}windows-portable/ -i "*"
 
     - name: Create Release
       id: create_release
