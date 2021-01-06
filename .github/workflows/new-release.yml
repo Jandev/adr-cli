@@ -92,29 +92,26 @@ jobs:
     - name: Publish for Ubuntu-x64 single executable
       run: dotnet publish $ADR_PROJECT_FILE --runtime $UBUNTU_RUNTIME -c $CONFIGURATION /p:PublishSingleFile=true --output ${{ env.OUTPUT_PATH }}ubuntu-portable/
 
-    - name: Zip artifacts
+    - name: Zip Windows artifacts
       uses: montudor/action-zip@v0.1.0
       with:
         args: zip -r ./ADR-CLI-tool-windows-${{ steps.gitversion.outputs.nuGetVersionV2 }}.zip ./artifact/windows-portable/
 
-    - name: Create Release
+    - name: Zip Ubuntu artifacts
+      uses: montudor/action-zip@v0.1.0
+      with:
+        args: zip -r ./ADR-CLI-tool-ubuntu-${{ steps.gitversion.outputs.nuGetVersionV2 }}.zip ./artifact/ubuntu-portable/
+
+    - name: Release
       id: create_release
-      uses: actions/create-release@v1
+      uses: softprops/action-gh-release@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: ${{ steps.gitversion.outputs.nuGetVersionV2 }}
-        release_name: Release ${{ steps.gitversion.outputs.nuGetVersionV2 }}
+        name: Release ${{ steps.gitversion.outputs.nuGetVersionV2 }}
+        tag_name: ${{ steps.gitversion.outputs.nuGetVersionV2 }}          
+        files: |
+          ${{ env.OUTPUT_PATH }}ADR-CLI-tool-windows-${{ steps.gitversion.outputs.nuGetVersionV2 }}.zip
+          ${{ env.OUTPUT_PATH }}ADR-CLI-tool-ubuntu-${{ steps.gitversion.outputs.nuGetVersionV2 }}.zip
         draft: false
         prerelease: false
-
-    - name: Upload Release Asset
-      id: upload-release-asset 
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ${{ env.OUTPUT_PATH }}ADR-CLI-tool-${{ steps.gitversion.outputs.nuGetVersionV2 }}.zip
-        asset_name: ADR-CLI-tool-${{ steps.gitversion.outputs.nuGetVersionV2 }}.zip
-        asset_content_type: application/zip
