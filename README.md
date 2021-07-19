@@ -2,9 +2,47 @@
 
 A command-line tool for working with Architecture Decision Records (ADRs).
 
+# Usage
+
+You can use this tool to create a directory for your ADR documents to be stored in and create new ADR files.  
+An index file will also be created on initial setup.
+
+## Init
+`adr-cli init` 
+
+This will create the necessary folder (`/docs/adr`) from where you are running the command, including the initial document (`0001-record-architecture-decisions.md`) and the index file (`0000-index.md`).  
+Once created, it will try to open the initial file in your Markdown editor.
+
+## List
+`adr-cli init` 
+
+Placeholder, does nothing yet.  
+This command is inherited from the previous implementation and can be deleted.
+
+## New
+`adr-cli new "New decision"` 
+
+Will create a new ADR document with the mentioned title and a follow-up number.  
+The document will have the `Proposed` status.
+
+The `-s` flag (supercedes) is not implemented at this time.
+
+## Link
+
+Placeholder, does nothing yet.  
+This command is inherited from the previous implementation and can be deleted.
+
+## Generate
+
+Placeholder, does nothing yet.  
+This command is inherited from the previous implementation and can be deleted.
+
+
 # Publishing
 
-You can use the `FolderProfile` in this solution to publish the project.
+If you don't want to use the [Releases published in this repository](https://github.com/Jandev/adr-cli/releases), you can also publish them yourselves.
+
+The `FolderProfile` in this solution is set up to do this.
 
 If you're a fan of the dotnet CLI, publish using the following command:
 
