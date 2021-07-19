@@ -2,6 +2,13 @@
 
 A command-line tool for working with Architecture Decision Records (ADRs).
 
+# Installation
+
+* Download the latest version of the adr-cli tool from the [Releases page](https://github.com/Jandev/adr-cli/releases)  
+It's available for both Windows & Linux.
+
+* Copy the executable to a location mentioned in the PATH of your system.
+
 # Usage
 
 You can use this tool to create a directory for your ADR documents to be stored in and create new ADR files.  
