@@ -49,7 +49,8 @@ namespace adr
                         else
                         {
                             AdrFile superSededFile = new AdrFile(adrFile.SupersededFile);
-                            writer.WriteLine($"| {adrFile.Number} | ~~[{adrFile.Title}](./{fileName})~~| [{superSededFile.Title}](./{superSededFile.FileName}) |");
+                            writer.WriteLine($"| {adrFile.Number} | ~~[{adrFile.Title}](./{fileName})~~|" +
+                                $" [{superSededFile.Number} - {superSededFile.Title}](./{superSededFile.FileName}) |");
                         }
                     }
                 }

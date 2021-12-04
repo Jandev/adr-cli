@@ -43,12 +43,12 @@ namespace adr
             {
                 command.Description = "";
                 var title = command.Argument("title", "");
-                var supercedes = command.Option("-s|--supercedes", "", CommandOptionType.MultipleValue);
+                var supercedes = command.Option("-s|--supercedes", "", CommandOptionType.SingleValue);
                 command.HelpOption(HelpOption);
-
                 command.OnExecute(() =>
                 {
-                    new AdrEntry(TemplateType.New) { Title = title.Value ?? "" }
+                    new AdrEntry(TemplateType.New) { Title = title.Value ?? "", 
+                        SupersededFile = supercedes.Values.Count > 0 ? supercedes.Values[supercedes.Values.Count - 1] : null  }
                         .Write()
                         .Launch();
                     return 0;
@@ -78,7 +78,7 @@ namespace adr
                 app.ShowHelp();
                 return 0;
             });
-            app.Execute(args);
+            app.Execute(args);            
         }
     }
 }

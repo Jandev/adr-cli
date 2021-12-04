@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Text.RegularExpressions;
 
 namespace adr
 {
@@ -16,6 +17,8 @@ namespace adr
 
         private string fileName;
 
+        private int fileNumber;
+
         public AdrEntry(TemplateType templateType)
         {
             this.docFolder = AdrSettings.Current.DocFolder;
@@ -24,6 +27,7 @@ namespace adr
         }
 
         public string Title { get; set; } = "Record Architecture Decisions";
+        public string SupersededFile { get; set; }
 
         public AdrEntry Write()
         {
@@ -33,7 +37,24 @@ namespace adr
             }
             else
             {
+                AdrFile superSededFile = null;
+                if (!string.IsNullOrWhiteSpace(this.SupersededFile))
+                {
+                    string superFilePath = Path.Combine(this.docFolder, Path.GetFileName(this.SupersededFile));
+
+                    if (!File.Exists(superFilePath))
+                    {
+                        throw new FileNotFoundException("Superseded file does not exists");
+                    }
+
+                    superSededFile = new AdrFile(superFilePath);                    
+                }
+
                 this.WriteNew();
+                
+                if (superSededFile != null)
+                    SupersedeAdrFileStatus(superSededFile);
+
             }
 
             new AdrIndex(this.docFolder).Generate();
@@ -43,7 +64,7 @@ namespace adr
 
         private void WriteNew()
         {
-            var fileNumber = Directory.Exists(this.docFolder)
+            fileNumber = Directory.Exists(this.docFolder)
                 ? GetNextFileNumber(this.docFolder)
                 : 1;
             fileName = Path.Combine(
@@ -57,7 +78,7 @@ namespace adr
 
         private void WriteAdr()
         {
-            var fileNumber = Directory.Exists(this.docFolder)
+            fileNumber = Directory.Exists(this.docFolder)
                 ? GetNextFileNumber(this.docFolder)
                 : 1;
             fileName = Path.Combine(
@@ -119,6 +140,45 @@ namespace adr
                 writer.WriteLine("## Consequences");
                 writer.WriteLine();
                 writer.WriteLine("{consequences}");
+            }
+        }
+
+        private void SupersedeAdrFileStatus(AdrFile file)
+        {
+            var filePath = Path.Combine(this.docFolder, file.FileName);
+            string[] content = File.Exists(filePath) ?
+                File.ReadAllLines(filePath) : null;
+
+            if (content?.Length > 0)
+            {
+                //reading file to update the status 
+                bool lastNonEmptyLineContainsStatus = false;
+                for (int i = 0; i < content.Length; i++)
+                {
+
+                    if (lastNonEmptyLineContainsStatus && !string.IsNullOrWhiteSpace(content[i])
+                        && !Regex.IsMatch(content[i], @"##\s+Context", RegexOptions.IgnoreCase))
+                    {
+                        content[i] = $"Superseded - [{fileNumber.ToString().PadLeft(4, '0')} - {Title}]" +
+                            $"(./{Path.GetFileName(fileName)})";
+
+                        break;
+                    }
+
+                    if (!string.IsNullOrWhiteSpace(content[i]))
+                    {
+                        lastNonEmptyLineContainsStatus = Regex.IsMatch(content[i], @"##\s+Status", RegexOptions.IgnoreCase);
+                    }
+                }
+
+                //writing to the file with new status to `superseded`
+                using var writer = File.CreateText(filePath);
+                {
+                    foreach(var line in content)
+                    {
+                        writer.WriteLine(line);
+                    }
+                }
             }
         }
 
