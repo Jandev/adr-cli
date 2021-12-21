@@ -11,6 +11,10 @@ namespace adr
         public string Title { get; set; }
         public int Number { get; set; }
         public string FileName { get; set; }
+
+        /// <summary>
+        /// Path to the superseded file
+        /// </summary>
         public string SupersededFile { get; set; }
 
         public AdrFile(string filePath)
@@ -31,13 +35,29 @@ namespace adr
                 foreach(string line in content)
                 {
 
-                    var match = Regex.Match(line, @"(?<![^\s])#(\s*)[0-9]+[.][\s]*.*");
-                    if(match.Success)
+                    var headerMatch = Regex.Match(line, @"(?<![^\s])#(\s*)[0-9]+[.][\s]*.*");
+                    if(headerMatch.Success)
                     {
-                        string header = match.Value;
+                        string header = headerMatch.Value;
 
                         Regex titleRegex = new Regex(@"(?<![^\s])#(\s*)[0-9]+[.][\s]*");
                         Title = titleRegex.Replace(header, string.Empty, 1);
+                    }
+
+                    var superMatch = Regex.Match(line, @"(?<=Superseded - ).*(?=\s*)");
+                    if (superMatch.Success)
+                    {
+                        string superSededLine = superMatch.Value;
+
+                        Regex superFileRegex = new Regex(@"(?<=\(\.\/)[^\s]+(?=\))");
+
+                        var superFileMatches = superFileRegex.Matches(superSededLine);
+                        if (superFileMatches.Count > 0)
+                        {
+                            var superFileName = superFileMatches[superFileMatches.Count - 1].Value;
+                            SupersededFile = Path.Combine(AdrSettings.Current.DocFolder, superFileName);
+                        }
+
                         break;
                     }
                 }

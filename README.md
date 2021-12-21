@@ -32,7 +32,24 @@ This command is inherited from the previous implementation and can be deleted.
 Will create a new ADR document with the mentioned title and a follow-up number.  
 The document will have the `Proposed` status.
 
-The `-s` flag (supercedes) is not implemented at this time.
+The `-s` flag (supercedes) can be used like the following:
+
+```
+ ./adr-cli new "Superseded decision" -s "0003-another-decision.md"
+```
+This will result in an index like the following example:
+```
+# Index
+
+| Number | Title | Superseded by |
+| ------ | ----- | ------------- |
+| 1 | [Record Architecture Decisions](./0001-record-architecture-decisions.md)| |
+| 2 | [new-decision](./0002-new-decision.md)| |
+| 3 | ~~[Another decision](./0003-another-decision.md)~~| [5 - superseded-decision](./0005-superseded-decision.md) |
+| 4 | [Another decision](./0004-another-decision.md)| |
+| 5 | [superseded-decision](./0005-superseded-decision.md)| |
+
+```
 
 ## Link
 
